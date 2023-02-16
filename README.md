@@ -1,14 +1,65 @@
-# Welcome to your CDK TypeScript project
+# Workshop Test: Meal planing
 
-This is a blank project for CDK development with TypeScript.
+## Meal Entity
+- date (PK, Partition Key)
+  - yyyy-mm-dd
+- sortKey (PK, Sort Key)
+  - `${userName}#${type}#${randomNumber}`
+- userName
+- type
+  - breakfast
+  - lunch
+  - dinner
+- preparation
+  - vegan
+  - meat
+- size
+  - small
+  - medium
+  - large
 
-The `cdk.json` file tells the CDK Toolkit how to execute your app.
+## API Endpoints
+`[POST] /meal`
 
-## Useful commands
+**Request payload format:**
+```json
+{
+  "userName": "John Doe",
+  "type": "breakfast",
+  "preparation": "vegan",
+  "size": "small"
+}
+```
+**Response format:**
+```json
+{
+  "response": {
+    "type": "success",
+    "message": "Meal plan successfully created. Meal plan ID: 123"
+  }
+}
+```
+---
 
-* `npm run build`   compile typescript to js
-* `npm run watch`   watch for changes and compile
-* `npm run test`    perform the jest unit tests
-* `cdk deploy`      deploy this stack to your default AWS account/region
-* `cdk diff`        compare deployed stack with current state
-* `cdk synth`       emits the synthesized CloudFormation template
+`[GET] /meals?date=${yyyy-mm-dd}`
+
+**Response format:**
+```json
+{
+  "response": {
+    "type": "success",
+    "data": {
+      "date": "${yyyy-mm-dd}",
+      "meals": [
+        {
+          // meal attributes
+        },
+        {
+          // meal attributes
+        }
+      ]
+    }
+  }
+}
+```
+
