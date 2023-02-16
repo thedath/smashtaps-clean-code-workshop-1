@@ -65,8 +65,8 @@ export class SmashtapsCleanCodeWorkshop1Stack extends Stack {
   }
 
   public initGetAllMeals() {
-    // create meal inserting Lambda
-    const mealCreateLambda = new lambda.Function(
+    // create meals fetching Lambda
+    const getAllMealsLambda = new lambda.Function(
       this,
       constants.LAMBDA_NAME_MEAL_GET_ALL,
       {
@@ -81,13 +81,13 @@ export class SmashtapsCleanCodeWorkshop1Stack extends Stack {
     );
 
     // grant the Lambda the necessary access over the table
-    this.table.grantWriteData(mealCreateLambda);
+    this.table.grantReadData(getAllMealsLambda);
 
     // attaching the Lambda to the API
     this.api.root
       .getResource(constants.API_ROOT_NAME)
       ?.addResource("all")
-      ?.addMethod("GET", new apiGateway.LambdaIntegration(mealCreateLambda));
+      ?.addMethod("GET", new apiGateway.LambdaIntegration(getAllMealsLambda));
 
     return this;
   }
