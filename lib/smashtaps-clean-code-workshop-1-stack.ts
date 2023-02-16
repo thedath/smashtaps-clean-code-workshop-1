@@ -37,14 +37,14 @@ export class SmashtapsCleanCodeWorkshop1Stack extends Stack {
     this.api.root.addResource(constants.API_ROOT_NAME);
   }
 
-  public initMealCreate() {
+  public initCreateMeal() {
     // create meal inserting Lambda
     const mealCreateLambda = new lambda.Function(
       this,
       constants.LAMBDA_NAME_MEAL_CREATE,
       {
         functionName: constants.LAMBDA_NAME_MEAL_CREATE,
-        code: lambda.Code.fromAsset("lib/lambda"),
+        code: lambda.Code.fromAsset("lib/lambda/meal/create"),
         handler: "index.handler",
         runtime: lambda.Runtime.NODEJS_16_X,
       }
@@ -57,16 +57,18 @@ export class SmashtapsCleanCodeWorkshop1Stack extends Stack {
     this.api.root
       .getResource(constants.API_ROOT_NAME)
       ?.addMethod("POST", new apiGateway.LambdaIntegration(mealCreateLambda));
+
+    return this;
   }
 
   public initGetAllMeals() {
     // create meal inserting Lambda
     const mealCreateLambda = new lambda.Function(
       this,
-      constants.LAMBDA_NAME_MEAL_CREATE,
+      constants.LAMBDA_NAME_MEAL_GET_ALL,
       {
-        functionName: constants.LAMBDA_NAME_MEAL_CREATE,
-        code: lambda.Code.fromAsset("lib/lambda"),
+        functionName: constants.LAMBDA_NAME_MEAL_GET_ALL,
+        code: lambda.Code.fromAsset("lib/lambda/meal/getAll"),
         handler: "index.handler",
         runtime: lambda.Runtime.NODEJS_16_X,
       }
@@ -80,5 +82,7 @@ export class SmashtapsCleanCodeWorkshop1Stack extends Stack {
       .getResource(constants.API_ROOT_NAME)
       ?.addResource("all")
       ?.addMethod("POST", new apiGateway.LambdaIntegration(mealCreateLambda));
+
+    return this;
   }
 }
