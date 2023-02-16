@@ -47,6 +47,9 @@ export class SmashtapsCleanCodeWorkshop1Stack extends Stack {
         code: lambda.Code.fromAsset("lib/lambda/meal/create"),
         handler: "index.handler",
         runtime: lambda.Runtime.NODEJS_16_X,
+        environment: {
+          TABLE_NAME: constants.TABLE_NAME,
+        },
       }
     );
 
@@ -71,6 +74,9 @@ export class SmashtapsCleanCodeWorkshop1Stack extends Stack {
         code: lambda.Code.fromAsset("lib/lambda/meal/getAll"),
         handler: "index.handler",
         runtime: lambda.Runtime.NODEJS_16_X,
+        environment: {
+          TABLE_NAME: constants.TABLE_NAME,
+        },
       }
     );
 
@@ -81,7 +87,7 @@ export class SmashtapsCleanCodeWorkshop1Stack extends Stack {
     this.api.root
       .getResource(constants.API_ROOT_NAME)
       ?.addResource("all")
-      ?.addMethod("POST", new apiGateway.LambdaIntegration(mealCreateLambda));
+      ?.addMethod("GET", new apiGateway.LambdaIntegration(mealCreateLambda));
 
     return this;
   }
