@@ -28,15 +28,15 @@ export const handler = async (
       return respond(403, "error", "User name cannot be empty", { userName });
     }
 
-    if (!Object.keys(MealType).includes(type)) {
+    if (!Object.values(MealType).includes(type)) {
       return respond(403, "error", "Invalid meal type", { type });
     }
 
-    if (!Object.keys(MealPreparation).includes(preparation)) {
+    if (!Object.values(MealPreparation).includes(preparation)) {
       return respond(403, "error", "Invalid meal preparation", { preparation });
     }
 
-    if (!Object.keys(MealSize).includes(size)) {
+    if (!Object.values(MealSize).includes(size)) {
       return respond(403, "error", "Invalid meal size", { size });
     }
 
@@ -75,7 +75,10 @@ export const handler = async (
       })
     );
 
-    return respond(200, "success", "Meal successfully created", { refNo });
+    return respond(200, "success", "Meal successfully created", {
+      date,
+      refNo,
+    });
   } catch (error) {
     return respond(
       404,
