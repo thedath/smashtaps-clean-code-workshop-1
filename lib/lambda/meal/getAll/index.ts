@@ -4,6 +4,7 @@ import { DynamoDB, QueryCommand } from "@aws-sdk/client-dynamodb";
 import { MealPreparation, MealSize, MealType } from "../../../@types";
 import respond from "../../../utils/respond";
 import isValidDate from "../../../utils/isValidDate";
+import moment = require("moment");
 
 export const handler = async (
   event: APIGatewayEvent,
@@ -25,7 +26,7 @@ export const handler = async (
 
     let { date } = event.queryStringParameters;
 
-    if (!date || !isValidDate(date)) {
+    if (!moment(date).isValid()) {
       return respond(403, "error", "Invalid date", { date });
     }
 
@@ -39,7 +40,7 @@ export const handler = async (
         },
         ExpressionAttributeValues: {
           ":PKV": {
-            S: date,
+            S: date!,
           },
         },
       })

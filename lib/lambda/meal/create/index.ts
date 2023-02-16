@@ -1,6 +1,10 @@
 import { APIGatewayEvent, APIGatewayProxyResult, Context } from "aws-lambda";
 import { DynamoDB, PutItemCommand } from "@aws-sdk/client-dynamodb";
 
+import { Moment } from "moment";
+
+const moment = require("moment");
+
 import { MealPreparation, MealSize, MealType } from "../../../@types";
 import respond from "../../../utils/respond";
 
@@ -40,7 +44,7 @@ export const handler = async (
       return respond(403, "error", "Invalid meal size", { size });
     }
 
-    const date = `${new Date().getFullYear()}-${new Date().getMonth()}-${new Date().getDate()}`;
+    const date = (moment() as Moment).format("YYYY-MM-DD");
     const refNo = new String(new Date().getTime()).toString();
 
     const dynamodb = new DynamoDB({});
