@@ -5,7 +5,11 @@ import { Moment } from "moment";
 
 const moment = require("moment");
 
-import { MealPreparation, MealSize, MealType } from "../../../@types";
+import {
+  MealPreparation,
+  MealSize,
+  MealType,
+} from "../../../../cleancode/@types";
 import respond from "../../../utils/respond";
 
 export const handler = async (

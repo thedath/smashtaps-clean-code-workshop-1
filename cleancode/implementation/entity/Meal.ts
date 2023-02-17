@@ -1,5 +1,5 @@
-import { MealPreparation, MealSize, MealType } from "../../../lib/@types";
-import AEntity from "../AEntity";
+import { MealPreparation, MealSize, MealType } from "../../@types";
+import AEntity from "../../definition/entity/AEntity";
 
 export interface MealProps {
   date?: string;

@@ -1,6 +1,6 @@
 import { DynamoDB, PutItemCommand } from "@aws-sdk/client-dynamodb";
-import Meal from "../../entity/impl/Meal";
-import ARepository from "../ARepository";
+import ARepository from "../../definition/repository/ARepository";
+import Meal from "../entity/Meal";
 
 export type MealDynamoRepositoryProps = {
   dynamoDBTableName: string;

@@ -1,7 +1,11 @@
 import { APIGatewayEvent, APIGatewayProxyResult, Context } from "aws-lambda";
 import { DynamoDB, QueryCommand } from "@aws-sdk/client-dynamodb";
 
-import { MealPreparation, MealSize, MealType } from "../../../@types";
+import {
+  MealPreparation,
+  MealSize,
+  MealType,
+} from "../../../../cleancode/@types";
 import respond from "../../../utils/respond";
 import isValidDate from "../../../utils/isValidDate";
 import moment = require("moment");
