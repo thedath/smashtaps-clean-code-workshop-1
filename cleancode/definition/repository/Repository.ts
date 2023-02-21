@@ -1,13 +1,16 @@
-import IEntity from "../entity/Entity";
+import Entity from "../entity/Entity";
 
 export default abstract class Repository {
-  abstract create(entity: IEntity): IEntity | Promise<IEntity>;
+  abstract create(entity: Entity): Entity | Promise<Entity>;
+
   abstract update(
-    oldEntity: IEntity,
-    newEntity: IEntity
-  ): IEntity | Promise<IEntity>;
-  abstract delete(entity: IEntity): IEntity | Promise<IEntity>;
+    oldEntity: Entity,
+    newEntity: Entity
+  ): Entity | Promise<Entity>;
+
+  abstract delete(entity: Entity): Entity | Promise<Entity>;
+
   abstract get(
-    entity: IEntity
-  ): IEntity | Promise<IEntity> | IEntity[] | Promise<IEntity[]>;
+    entity: Entity
+  ): Entity | Promise<Entity> | Entity[] | Promise<Entity[]>;
 }

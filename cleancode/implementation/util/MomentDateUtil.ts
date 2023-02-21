@@ -10,7 +10,6 @@ export default class MomentDateUtil implements DateUtil {
   }
 
   isYYYY_MM_DD(date: string): Boolean {
-    this.moment();
     const m: Moment = this.moment(date, "YYYY-MM-DD");
     return m.isValid();
   }

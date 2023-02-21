@@ -1,7 +1,8 @@
+import { aws_datasync } from "aws-cdk-lib";
 import Entity from "../../definition/entity/Entity";
 import Repository from "../../definition/repository/Repository";
 
-export default class DynamoDBMealRepository extends Repository {
+export default class RDSMealRepository extends Repository {
   constructor() {
     super();
   }
