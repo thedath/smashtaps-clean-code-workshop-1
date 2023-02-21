@@ -1,98 +1,35 @@
 import { APIGatewayEvent, APIGatewayProxyResult, Context } from "aws-lambda";
-import { DynamoDB, PutItemCommand } from "@aws-sdk/client-dynamodb";
-
-import { Moment } from "moment";
-
-const moment = require("moment");
-
-import {
-  MealPreparation,
-  MealSize,
-  MealType,
-} from "../../../../cleancode/@types";
-import respond from "../../../utils/respond";
+import Meal from "../../../../cleancode/implementation/entity/Meal";
+import DynamoDBMealRepository from "../../../../cleancode/implementation/repository/DynamoDBMealRepository";
+import MealUseCase from "../../../../cleancode/implementation/usecase/MealUseCase";
+import MomentDateUtil from "../../../../cleancode/implementation/util/MomentDateUtil";
 
 export const handler = async (
   event: APIGatewayEvent,
   context: Context
 ): Promise<APIGatewayProxyResult> => {
-  console.log(`Event: ${JSON.stringify(event, null, 2)}`);
-  console.log(`Context: ${JSON.stringify(context, null, 2)}`);
+  const tableName = process.env.TABLE_NAME;
 
-  try {
-    const tableName = process.env.TABLE_NAME;
+  const { userName, type, preparation, size } = JSON.parse(event.body!);
 
-    if (!tableName) {
-      return respond(500, "error", "Internal server error");
-    }
+  const dateUtil = new MomentDateUtil();
+  const meal = new Meal();
+  meal.preparation = preparation;
+  meal.userName = userName;
+  meal.type = type;
+  meal.size = size;
+  meal.date = dateUtil.toYYYY_MM_DD();
+  meal.refNo = new String(new Date().getTime()).toString();
 
-    if (!event.body) {
-      return respond(403, "error", "Invalid request");
-    }
+  const mealRepository = new DynamoDBMealRepository({
+    dynamoDBTableName: tableName!,
+  });
 
-    const { userName, type, preparation, size } = JSON.parse(event.body);
+  const mealUseCase = new MealUseCase(mealRepository, dateUtil);
+  const createMealResponse = await mealUseCase.createUserMeal(meal);
 
-    if (!userName) {
-      return respond(403, "error", "User name cannot be empty", { userName });
-    }
-
-    if (!Object.values(MealType).includes(type)) {
-      return respond(403, "error", "Invalid meal type", { type });
-    }
-
-    if (!Object.values(MealPreparation).includes(preparation)) {
-      return respond(403, "error", "Invalid meal preparation", { preparation });
-    }
-
-    if (!Object.values(MealSize).includes(size)) {
-      return respond(403, "error", "Invalid meal size", { size });
-    }
-
-    const date = (moment() as Moment).format("YYYY-MM-DD");
-    const refNo = new String(new Date().getTime()).toString();
-
-    const dynamodb = new DynamoDB({});
-    const response = await dynamodb.send(
-      new PutItemCommand({
-        TableName: tableName,
-        Item: {
-          date: {
-            S: date,
-          },
-          sortKey: {
-            S: `${(userName as String).replace(" ", "")}#${
-              type as string
-            }#${refNo}`,
-          },
-          userName: {
-            S: userName,
-          },
-          type: {
-            S: type,
-          },
-          preparation: {
-            S: preparation,
-          },
-          size: {
-            S: size,
-          },
-          refNo: {
-            N: refNo,
-          },
-        },
-      })
-    );
-
-    return respond(200, "success", "Meal successfully created", {
-      date,
-      refNo,
-    });
-  } catch (error) {
-    return respond(
-      404,
-      "error",
-      "Meal creation failed",
-      (error as Error).message
-    );
-  }
+  return {
+    statusCode: 200,
+    body: JSON.stringify(createMealResponse),
+  };
 };

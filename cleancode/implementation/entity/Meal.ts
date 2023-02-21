@@ -52,11 +52,11 @@ export default class Meal extends Entity {
     this._size = value;
   }
 
-  private _refNo?: number | undefined;
-  public get refNo(): number | undefined {
+  private _refNo?: string | undefined;
+  public get refNo(): string | undefined {
     return this._refNo;
   }
-  public set refNo(value: number | undefined) {
+  public set refNo(value: string | undefined) {
     this._refNo = value;
     this.updateSortKey();
   }

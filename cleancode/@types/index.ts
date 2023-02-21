@@ -2,9 +2,20 @@ export interface IDependency {
   readonly TAG: string;
 }
 
-export interface IResponse<T extends "error" | "success"> {
-  type: T;
-  code: T extends "error" ? 403 | 404 | 505 : 200;
+export enum ResponseType {
+  ERROR = "error",
+  SUCCESS = "success",
+}
+
+export enum ErrorCode {
+  E1 = "E0001",
+  E2 = "E0002",
+  E3 = "E0003",
+}
+
+export interface IResponse {
+  type: ResponseType;
+  code?: ErrorCode;
   message?: string;
   data?: any;
 }

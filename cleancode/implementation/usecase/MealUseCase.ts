@@ -1,8 +1,8 @@
-import { IResponse } from "../../@types";
+import { IResponse, ResponseType } from "../../@types";
 import Repository from "../../definition/repository/Repository";
 import DateUtil from "../../definition/util/DateUtil";
 import Meal from "../entity/Meal";
-import MomentDateUtil from "../util/MomentDateUtil";
+import Response from "../util/MealResponse";
 import MealValidator from "../validator/MealValidator";
 
 export default class MealUseCase {
@@ -14,7 +14,8 @@ export default class MealUseCase {
     this.dateUtil = dateUtil;
   }
 
-  async createUserMeal(meal: Meal): IResponse {
+  async createUserMeal(meal: Meal): Promise<IResponse> {
+    const res = new Response();
     try {
       const mealValidator = new MealValidator(meal, this.dateUtil);
       const validationResponse = mealValidator.validate(
@@ -26,11 +27,12 @@ export default class MealUseCase {
         "userName"
       );
       if (validationResponse.length > 0) {
+        return res.mealCreateValidationError(validationResponse);
       }
       const createdMeal = await this.mealRepository.create(meal);
-      // success
+      return res.mealCreateSuccess();
     } catch (error: any) {
-      // error
+      return res.mealCreateGlobalError((error as Error).message);
     }
   }
 }
