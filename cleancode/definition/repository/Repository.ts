@@ -1,7 +1,6 @@
 import IEntity from "../entity/Entity";
 
 export default abstract class Repository {
-  constructor() {}
   abstract create(entity: IEntity): IEntity | Promise<IEntity>;
   abstract update(
     oldEntity: IEntity,
